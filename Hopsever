@@ -72,7 +72,7 @@ HopBtn.TextSize = 22
 HopBtn.TextColor3 = Color3.fromRGB(0,180,255)
 Instance.new("UICorner", HopBtn).CornerRadius = UDim.new(0,8)
 
---================ HOP LOGIC (KHÔNG AUTO) =================
+--================ HOP LOGIC (CHỈ BẤM MỚI HOP) =================
 local function HopServer()
 	Status.Text = "Searching..."
 	local servers = {}
