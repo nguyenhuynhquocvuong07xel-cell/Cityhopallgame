@@ -3,7 +3,7 @@ repeat task.wait() until game:IsLoaded()
 --================ AUTO RELOAD KHI TELEPORT =================
 if queue_on_teleport then
 	queue_on_teleport([[
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/USERNAME/REPO/main/cityhub.lua"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/nguyenhuynhquocvuong07xel-cell/Cityhopallgame/refs/heads/main/Hopsever"))()
 	]])
 end
 
@@ -48,26 +48,22 @@ Gui.ResetOnSpawn = false
 Gui.Parent = Player:WaitForChild("PlayerGui")
 
 --================ MAIN =================
-local Main = Instance.new("Frame")
+local Main = Instance.new("Frame", Gui)
 Main.Size = UDim2.fromScale(0.26, 0.18)
-Main.Position = UDim2.fromScale(0.37, 0.38)
+Main.Position = UDim2.fromScale(0.37,0.38)
 Main.BackgroundColor3 = Color3.fromRGB(15,15,15)
 Main.BackgroundTransparency = 0.1
 Main.Active = true
 Main.Draggable = true
-Main.Parent = Gui
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0,12)
 
---================ SCALE =================
 local Scale = Instance.new("UIScale", Main)
 Scale.Scale = 1
 
---================ FRAME STROKE =================
 local FrameStroke = Instance.new("UIStroke", Main)
 FrameStroke.Color = Color3.fromRGB(0,180,255)
 FrameStroke.Thickness = 2
 
---================ TITLE =================
 local Title = Instance.new("TextLabel", Main)
 Title.Size = UDim2.fromScale(1,0.28)
 Title.BackgroundTransparency = 1
@@ -76,7 +72,6 @@ Title.Font = Enum.Font.GothamBold
 Title.TextSize = 20
 Title.TextColor3 = Color3.fromRGB(0,180,255)
 
---================ STATUS =================
 local Status = Instance.new("TextLabel", Main)
 Status.Position = UDim2.fromScale(0,0.32)
 Status.Size = UDim2.fromScale(1,0.22)
@@ -86,7 +81,6 @@ Status.Font = Enum.Font.Gotham
 Status.TextSize = 22
 Status.TextColor3 = Color3.fromRGB(200,200,200)
 
---================ BUTTON =================
 local HopBtn = Instance.new("TextButton", Main)
 HopBtn.Position = UDim2.fromScale(0.15,0.6)
 HopBtn.Size = UDim2.fromScale(0.7,0.25)
@@ -97,7 +91,6 @@ HopBtn.TextSize = 22
 HopBtn.TextColor3 = Color3.fromRGB(0,180,255)
 Instance.new("UICorner", HopBtn).CornerRadius = UDim.new(0,8)
 
---================ HOP SERVER LOGIC (GIỮ NGUYÊN) =================
 local function HopServer()
 	Status.Text = "Searching..."
 	local servers = {}
@@ -131,11 +124,8 @@ local function HopServer()
 end
 
 HopBtn.MouseButton1Click:Connect(HopServer)
-
---================ AUTO HOP KHI LOAD =================
 task.delay(1.5, HopServer)
 
---================ RIGHT SHIFT TOGGLE =================
 local opened = true
 UserInputService.InputBegan:Connect(function(input, gpe)
 	if gpe then return end
