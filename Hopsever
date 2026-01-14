@@ -22,25 +22,6 @@ local Player = Players.LocalPlayer
 local PlaceId = game.PlaceId
 local JobId = game.JobId
 
---================ LOADING GUI =================
-local LoadingGui = Instance.new("ScreenGui", game.CoreGui)
-LoadingGui.Name = "CityHubLoading"
-
-local LFrame = Instance.new("Frame", LoadingGui)
-LFrame.Size = UDim2.fromScale(1,1)
-LFrame.BackgroundColor3 = Color3.fromRGB(10,10,10)
-
-local LText = Instance.new("TextLabel", LFrame)
-LText.Size = UDim2.fromScale(1,1)
-LText.BackgroundTransparency = 1
-LText.Text = "🏙️ City Hub\nLoading..."
-LText.Font = Enum.Font.GothamBold
-LText.TextSize = 28
-LText.TextColor3 = Color3.fromRGB(0,180,255)
-
-task.wait(1)
-LoadingGui:Destroy()
-
 --================ GUI =================
 local Gui = Instance.new("ScreenGui")
 Gui.Name = "CityHubGui"
@@ -91,6 +72,7 @@ HopBtn.TextSize = 22
 HopBtn.TextColor3 = Color3.fromRGB(0,180,255)
 Instance.new("UICorner", HopBtn).CornerRadius = UDim.new(0,8)
 
+--================ HOP LOGIC (KHÔNG AUTO) =================
 local function HopServer()
 	Status.Text = "Searching..."
 	local servers = {}
@@ -102,13 +84,20 @@ local function HopServer()
 			url ..= "&cursor="..cursor
 		end
 
-		local data = HttpService:JSONDecode(game:HttpGet(url))
-		for _,sv in pairs(data.data) do
-			if sv.playing < sv.maxPlayers and sv.id ~= JobId then
-				table.insert(servers, sv.id)
+		local success, data = pcall(function()
+			return HttpService:JSONDecode(game:HttpGet(url))
+		end)
+
+		if success and data and data.data then
+			for _, sv in ipairs(data.data) do
+				if sv.playing < sv.maxPlayers and sv.id ~= JobId then
+					table.insert(servers, sv.id)
+				end
 			end
+			cursor = data.nextPageCursor
+		else
+			break
 		end
-		cursor = data.nextPageCursor
 	until cursor == nil or #servers > 0
 
 	if #servers > 0 then
@@ -118,14 +107,13 @@ local function HopServer()
 			servers[math.random(#servers)]
 		)
 	else
-		Status.Text = "FULL – Retrying..."
-		task.delay(1.5, HopServer)
+		Status.Text = "No server found"
 	end
 end
 
 HopBtn.MouseButton1Click:Connect(HopServer)
-task.delay(1.5, HopServer)
 
+--================ RIGHT SHIFT TOGGLE =================
 local opened = true
 UserInputService.InputBegan:Connect(function(input, gpe)
 	if gpe then return end
